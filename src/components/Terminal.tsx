@@ -24,7 +24,7 @@ export default function Terminal() {
     }, [history]);
 
     const scrollToBottom = () => {
-        historyEndRef.current?.scrollIntoView(); // not sure if it's better with { behavior: "smooth" }
+        historyEndRef.current?.scrollIntoView();
     }
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,22 +34,31 @@ export default function Terminal() {
     const handleInputSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             parseCommand();
-            setHistory([...history, newCommand + content]);
             setContent('');
         }
     };
 
     const parseCommand = () => {
+        setHistory(prev => [...prev, newCommand + content]);
+
         const tokens: string[] = content.split(' ');
         switch (tokens[0]) {
+            case 'help':
+                handleHelp();
+                break;
             case 'cd':
                 handleCd(tokens.slice(1));
                 break;
         }
     }
 
+    const handleHelp = ()=>  {
+        setHistory(prev => [...prev, 'This command is currently not implemented !']);
+    }
+
     const handleCd = (tokens: string[])=>  {
         setPath(tokens[0]);
+        setHistory(prev => [...prev, 'This command is currently not implemented !']);
     }
 
     return (
@@ -101,6 +110,7 @@ const resizeBox : React.CSSProperties = {
     position: "relative",
     overflow: 'hidden',
     boxSizing: 'border-box',
+    color: "white",
 };
 
 const contentWrapper: React.CSSProperties = {
@@ -127,4 +137,5 @@ const inputStyle: React.CSSProperties = {
     fontWeight: 400,
     fontSize: 16,
     width: "90%",
+    color: 'white',
 }
