@@ -1,12 +1,12 @@
 import * as React from "react";
-import {ResizableBox} from "react-resizable";
+import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
-import {type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState} from "react";
+import { type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 
 export default function Terminal() {
 
     const [path, setPath] = useState('');
-    const newCommand: string = 'user:~'+path+'$ ';
+    const newCommand: string = 'user:~' + path + '$ ';
     const historyEndRef = useRef<null | HTMLDivElement>(null)
 
     const [history, setHistory] = useState([
@@ -40,7 +40,6 @@ export default function Terminal() {
 
     const parseCommand = () => {
         setHistory(prev => [...prev, newCommand + content]);
-
         const tokens: string[] = content.split(' ');
         switch (tokens[0]) {
             case 'help':
@@ -52,25 +51,33 @@ export default function Terminal() {
         }
     }
 
-    const handleHelp = ()=>  {
+    const handleHelp = () => {
         setHistory(prev => [...prev, 'This command is currently not implemented !']);
     }
 
-    const handleCd = (tokens: string[])=>  {
+    const handleCd = (tokens: string[]) => {
         setPath(tokens[0]);
         setHistory(prev => [...prev, 'This command is currently not implemented !']);
     }
 
     return (
         <div style={resizeBoxWrapper}>
-            <ResizableBox width={window.innerWidth} height={200} minConstraints={[window.innerWidth, 100]} maxConstraints={[window.innerWidth, 300]}
-                          resizeHandles={['n']} axis="y" style={resizeBox} handle={<span className="custom-handle custom-handle-n" />}>
+            <ResizableBox
+                width={Infinity} // Allow width to be flexible
+                height={200}
+                minConstraints={[Infinity, 100]} // Min height 100px
+                maxConstraints={[Infinity, 500]} // Max height 500px
+                resizeHandles={['n']}
+                axis="y"
+                style={resizeBox}
+                handle={<span className="custom-handle custom-handle-n" />}
+            >
                 <div style={contentWrapper}>
                     <div style={contentStyle}>
                         {history.map((line, key) => (
                             <span key={key}>
                                 {line}
-                                <br/>
+                                <br />
                             </span>
                         ))}
                         {newCommand}
@@ -84,7 +91,6 @@ export default function Terminal() {
                         <div ref={historyEndRef} />
                     </div>
                 </div>
-
             </ResizableBox>
         </div>
     );
@@ -94,15 +100,13 @@ const terminalColor: string = '#202020';
 const terminalPolice: string = 'Consolas, monospace';
 
 const resizeBoxWrapper: React.CSSProperties = {
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
     width: '100%',
-    zIndex: 1000,
+    height: 'auto',
+    backgroundColor: terminalColor,
 };
 
-const resizeBox : React.CSSProperties = {
-    width: '100%',
+const resizeBox: React.CSSProperties = {
+    width: '100% !important',
     height: '100%',
     padding: '1%',
     backgroundColor: terminalColor,
@@ -130,7 +134,6 @@ const inputStyle: React.CSSProperties = {
     border: 'none',
     outline: 'none',
     boxShadow: 'none',
-
     backgroundColor: terminalColor,
     fontFamily: terminalPolice,
     lineHeight: 1.5,
@@ -138,4 +141,4 @@ const inputStyle: React.CSSProperties = {
     fontSize: 16,
     width: "90%",
     color: 'white',
-}
+};
