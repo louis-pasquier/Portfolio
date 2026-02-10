@@ -3,18 +3,39 @@ import Terminal from "./components/Terminal.tsx";
 import Home from "./pages/Home.tsx";
 import SiteSidebar from "./components/SiteSidebar.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Project1 from "./pages/Project1.tsx";
+import Project1 from "./pages/projects/Project1.tsx";
+import Resume from "./pages/Resume.tsx";
+import Objectives from "./pages/Objectives.tsx";
+import {preload} from "react-dom";
 
 function App() {
     const [isTerminalOpen, setIsTerminalOpen] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(true);
+
+    const theme = {
+        background: isDarkMode ? '#1e1e1e' : '#ffffff',
+        text: isDarkMode ? '#e0e0e0' : '#333333',
+    };
+
+    preload("src/assets/resume.pdf", {as: "document"})
 
     return (
         <BrowserRouter>
-            <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+            <div style={{
+                display: 'flex',
+                height: '100dvh',
+                width: '100%',
+                overflow: 'hidden',
+                backgroundColor: theme.background,
+                color: theme.text,
+                transition: 'background-color 0.3s ease'
+            }}>
 
                 <SiteSidebar
                     isTerminalOpen={isTerminalOpen}
                     toggleTerminal={() => setIsTerminalOpen(!isTerminalOpen)}
+                    isDarkMode={isDarkMode}
+                    toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
                 />
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -23,17 +44,19 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home/>} />
                             <Route path="/project1" element={<Project1/>} />
+                            <Route path="/resume" element={<Resume/>} />
+                            <Route path="/objectives" element={<Objectives/>} />
                         </Routes>
                     </div>
 
                     {isTerminalOpen && (
-                        <Terminal/>
+                        <Terminal isDarkMode={isDarkMode}/>
                     )}
 
                 </div>
             </div>
         </BrowserRouter>
-    )
+    );
 }
 
-export default App
+export default App;

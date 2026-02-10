@@ -3,11 +3,15 @@ import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
 
-export default function Terminal() {
+interface TerminalProps {
+    isDarkMode: boolean;
+}
+
+export default function Terminal({isDarkMode}: TerminalProps) {
 
     const [path, setPath] = useState('');
     const newCommand: string = 'user:~' + path + '$ ';
-    const historyEndRef = useRef<null | HTMLDivElement>(null)
+    const historyEndRef = useRef<null | HTMLDivElement>(null);
 
     const [history, setHistory] = useState([
         'Welcome to my portfolio',
@@ -19,13 +23,21 @@ export default function Terminal() {
 
     const [content, setContent] = useState('');
 
+    const theme = {
+        bg: isDarkMode ? '#1e1e1e' : '#f3f3f3',
+        text: isDarkMode ? '#cccccc' : '#333333',
+        inputBg: isDarkMode ? '#1e1e1e' : '#f3f3f3',
+        border: isDarkMode ? '#333333' : '#cccccc',
+        font: 'Consolas, "Courier New", monospace'
+    };
+
     useEffect(() => {
         scrollToBottom();
     }, [history]);
 
     const scrollToBottom = () => {
         historyEndRef.current?.scrollIntoView();
-    }
+    };
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
@@ -49,31 +61,37 @@ export default function Terminal() {
                 handleCd(tokens.slice(1));
                 break;
         }
-    }
+    };
 
     const handleHelp = () => {
         setHistory(prev => [...prev, 'This command is currently not implemented !']);
-    }
+    };
 
     const handleCd = (tokens: string[]) => {
         setPath(tokens[0]);
         setHistory(prev => [...prev, 'This command is currently not implemented !']);
-    }
+    };
 
     return (
-        <div style={resizeBoxWrapper}>
+        <div style={{ ...resizeBoxWrapper, backgroundColor: theme.bg }}>
             <ResizableBox
-                width={Infinity} // Allow width to be flexible
+                width={Infinity}
                 height={200}
-                minConstraints={[Infinity, 100]} // Min height 100px
-                maxConstraints={[Infinity, 500]} // Max height 500px
+                minConstraints={[Infinity, 100]}
+                maxConstraints={[Infinity, 500]}
                 resizeHandles={['n']}
                 axis="y"
-                style={resizeBox}
+                style={{
+                    ...resizeBox,
+                    backgroundColor: theme.bg,
+                    color: theme.text,
+                    fontFamily: theme.font,
+                    borderTop: `1px solid ${theme.border}`
+                }}
                 handle={<span className="custom-handle custom-handle-n" />}
             >
                 <div style={contentWrapper}>
-                    <div style={contentStyle}>
+                    <div style={{ ...contentStyle, color: theme.text }}>
                         {history.map((line, key) => (
                             <span key={key}>
                                 {line}
@@ -82,11 +100,17 @@ export default function Terminal() {
                         ))}
                         {newCommand}
                         <input
-                            style={inputStyle}
+                            style={{
+                                ...inputStyle,
+                                backgroundColor: theme.inputBg,
+                                color: theme.text,
+                                fontFamily: theme.font
+                            }}
                             type="text"
                             value={content}
                             onChange={handleInputChange}
                             onKeyDown={handleInputSubmit}
+                            autoFocus
                         />
                         <div ref={historyEndRef} />
                     </div>
@@ -96,37 +120,33 @@ export default function Terminal() {
     );
 }
 
-const terminalColor: string = '#202020';
-const terminalPolice: string = 'Consolas, monospace';
-
+// Fixed base styles
 const resizeBoxWrapper: React.CSSProperties = {
     width: '100%',
     height: 'auto',
-    backgroundColor: terminalColor,
+    transition: 'background-color 0.3s ease',
 };
 
 const resizeBox: React.CSSProperties = {
     width: '100% !important',
     height: '100%',
-    padding: '1%',
-    backgroundColor: terminalColor,
-    fontFamily: terminalPolice,
+    padding: '10px',
     position: "relative",
     overflow: 'hidden',
     boxSizing: 'border-box',
-    color: "white",
+    transition: 'all 0.3s ease',
 };
 
 const contentWrapper: React.CSSProperties = {
     height: "100%",
     overflowY: "auto",
-    paddingTop: 8,
 };
 
 const contentStyle: React.CSSProperties = {
-    color: "white",
     padding: "0 1rem",
     textAlign: 'left',
+    fontSize: '14px',
+    lineHeight: '1.6'
 };
 
 const inputStyle: React.CSSProperties = {
@@ -134,11 +154,7 @@ const inputStyle: React.CSSProperties = {
     border: 'none',
     outline: 'none',
     boxShadow: 'none',
-    backgroundColor: terminalColor,
-    fontFamily: terminalPolice,
-    lineHeight: 1.5,
     fontWeight: 400,
-    fontSize: 16,
-    width: "90%",
-    color: 'white',
+    fontSize: 14,
+    width: "80%",
 };
