@@ -2,16 +2,27 @@ import * as React from "react";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import { type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface TerminalProps {
     isDarkMode: boolean;
+    toggleDarkMode: () => void;
 }
 
-export default function Terminal({isDarkMode}: TerminalProps) {
+interface Command {
+    description: string,
+    execute: (args: string[]) => void,
+}
 
-    const [path, setPath] = useState('');
-    const newCommand: string = 'user:~' + path + '$ ';
+export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
+
+    const location = useLocation();
+    const newCommand: string = 'user:~' + location.pathname + '$ ';
     const historyEndRef = useRef<null | HTMLDivElement>(null);
+    const navigate = useNavigate();
+
+    const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0);
+    const [cmdHistory, setCmdHistory] = useState<string[]>([]);
 
     const [history, setHistory] = useState([
         'Welcome to my portfolio',
@@ -31,6 +42,39 @@ export default function Terminal({isDarkMode}: TerminalProps) {
         font: 'Consolas, "Courier New", monospace'
     };
 
+    const commands = new Map<string, Command>();
+
+    commands.set('help', {
+        description: "Display help for available commands",
+        execute: () => {
+            printTerminal("Available commands");
+            commands.forEach((value, key) => {
+                printTerminal(`${key.padEnd(10)} : ${value.description}`);
+            });
+        }
+    })
+
+    commands.set('theme', {
+        description: "Change theme color",
+        execute: args => {
+            if ((args[0] === 'dark' && !isDarkMode)
+            || (args[0] === 'light' && isDarkMode)) {
+                toggleDarkMode()
+            }
+        }
+    })
+
+    commands.set('cd', {
+        description: "Change location",
+        execute: args => {
+            let path = args[0]
+            if (path == 'home') {
+                path = ''
+            }
+            navigate(path);
+        }
+    })
+
     useEffect(() => {
         scrollToBottom();
     }, [history]);
@@ -47,30 +91,44 @@ export default function Terminal({isDarkMode}: TerminalProps) {
         if (event.key === 'Enter') {
             parseCommand();
             setContent('');
+            setCmdHistoryIndex(cmdHistory.length+1)
+        } else if (event.key == 'ArrowUp') {
+            if (cmdHistoryIndex > 0) {
+                const newIndex = cmdHistoryIndex - 1;
+                setCmdHistoryIndex(newIndex);
+                setContent(cmdHistory[newIndex])
+            } else if (cmdHistoryIndex == 0) {
+                setContent(cmdHistory[cmdHistoryIndex])
+            }
+        } else if (event.key == 'ArrowDown') {
+            if (cmdHistoryIndex < cmdHistory.length - 1) {
+                const newIndex = cmdHistoryIndex + 1;
+                setCmdHistoryIndex(newIndex);
+                setContent(cmdHistory[newIndex]);
+            } else {
+                setCmdHistoryIndex(cmdHistory.length);
+                setContent('');
+            }
         }
     };
 
     const parseCommand = () => {
         setHistory(prev => [...prev, newCommand + content]);
-        const tokens: string[] = content.split(' ');
-        switch (tokens[0]) {
-            case 'help':
-                handleHelp();
-                break;
-            case 'cd':
-                handleCd(tokens.slice(1));
-                break;
+        setCmdHistory(prev => [...prev, content])
+
+        const [name, ...args] = content.split(' ');
+        const command = commands.get(name);
+
+        if (!command) {
+            printTerminal(`Unknown command : ${name}. Type 'help' to see the list of commands.`)
         }
+
+        command?.execute(args)
     };
 
-    const handleHelp = () => {
-        setHistory(prev => [...prev, 'This command is currently not implemented !']);
-    };
-
-    const handleCd = (tokens: string[]) => {
-        setPath(tokens[0]);
-        setHistory(prev => [...prev, 'This command is currently not implemented !']);
-    };
+    const printTerminal = (text: string) => {
+        setHistory(prev => [...prev, text]);
+    }
 
     return (
         <div style={{ ...resizeBoxWrapper, backgroundColor: theme.bg }}>
