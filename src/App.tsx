@@ -42,9 +42,9 @@ function App() {
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
-                    <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+                    <div style={{ flex: 1, overflow: 'auto' }}>
                         <Routes>
-                            <Route path="/" element={<Home/>} />
+                            <Route path="/" element={<Home isDarkMode={isDarkMode}/>} />
                             <Route path="/projects/project1" element={<Project1/>} />
                             <Route path="/resume" element={<Resume/>} />
                             <Route path="/objectives" element={<Objectives/>} />

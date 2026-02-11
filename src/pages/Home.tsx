@@ -1,24 +1,28 @@
 import * as React from "react";
 import { SocialIcon } from 'react-social-icons'
+import PolyBackground from "../components/PolyBackground.tsx";
 
-export default function Home () {
+export default function Home ({ isDarkMode }: { isDarkMode: boolean }) {
 
     return (
-        <div style={main}>
-            <div style={contentWrapper}>
-            <div style={titleWrapper}>
-                <div style={title}>Welcome to my portfolio</div>
-                <div style={subTitle}>
-                    Louis Pasquier
+        <PolyBackground isDarkMode={isDarkMode}>
+            <div style={main}>
+                <div style={contentWrapper}>
+                    <div style={titleWrapper}>
+                        <div style={title}>Welcome to my portfolio</div>
+                        <div style={subTitle}>
+                            Louis Pasquier
+                        </div>
+                    </div>
+                    <div style={iconBar}>
+                        <SocialIcon url="https://gitlab.com/louispasquier" />
+                        <SocialIcon url="https://github.com/louis-pasquier" />
+                        <SocialIcon url="https://linkedin.com/in/pasquier-louis/" />
+                        <SocialIcon url="mailto:louis.pasquier@outlook.com" />
+                    </div>
                 </div>
             </div>
-            <div style={iconBar}>
-                <SocialIcon url="https://gitlab.com/louispasquier" />
-                <SocialIcon url="https://linkedin.com/in/pasquier-louis/" />
-                <SocialIcon url="mailto:louis.pasquier@outlook.com" />
-            </div>
-        </div>
-        </div>
+        </PolyBackground>
     );
 }
 
