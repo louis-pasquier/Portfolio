@@ -7,6 +7,7 @@ import Project1 from "./pages/projects/Project1.tsx";
 import Resume from "./pages/Resume.tsx";
 import Objectives from "./pages/Objectives.tsx";
 import resumeUrl from './assets/resume.pdf';
+import Experiences from "./pages/Experiences.tsx";
 
 function App() {
     const [isTerminalOpen, setIsTerminalOpen] = useState(true);
@@ -47,6 +48,7 @@ function App() {
                             <Route path="/" element={<Home isDarkMode={isDarkMode}/>} />
                             <Route path="/projects/project1" element={<Project1/>} />
                             <Route path="/resume" element={<Resume/>} />
+                            <Route path="/experiences" element={<Experiences isDarkMode={isDarkMode}/>} />
                             <Route path="/objectives" element={<Objectives/>} />
                         </Routes>
                     </div>

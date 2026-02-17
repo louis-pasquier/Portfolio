@@ -127,6 +127,7 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
                     {activeTab === 'files' && (
                         <>
                             <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}> resume.pdf </MenuItem>
+                            <MenuItem component={<Link to="/experiences" />} icon={<FaFile/>}> experiences.tsx </MenuItem>
                             <MenuItem component={<Link to="/objectives" />} icon={<FaFile/>}> objectives.tsx </MenuItem>
                             <SubMenu label="projects" icon={<IoIosFolder />}>
                                 <MenuItem component={<Link to="/projects/project1" />} icon={<FaFile/>}> project1.tsx </MenuItem>
