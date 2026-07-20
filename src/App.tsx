@@ -3,11 +3,13 @@ import Terminal from "./components/Terminal.tsx";
 import Home from "./pages/Home.tsx";
 import SiteSidebar from "./components/SiteSidebar.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Project1 from "./pages/projects/Project1.tsx";
+import PS5Project from "./pages/projects/PS5Project.tsx";
+import PS6Project from "./pages/projects/PS6Project.tsx";
 import Resume from "./pages/Resume.tsx";
-import Objectives from "./pages/Objectives.tsx";
+import Technologies from "./pages/Technologies.tsx";
+import Skills from "./pages/Skills.tsx";
 import resumeUrl from './assets/resume.pdf';
-import Experiences from "./pages/Experiences.tsx";
+import Formation from "./pages/Formation.tsx";
 
 function App() {
     const [isTerminalOpen, setIsTerminalOpen] = useState(true);
@@ -46,10 +48,12 @@ function App() {
                     <div style={{ flex: 1, overflow: 'auto' }}>
                         <Routes>
                             <Route path="/" element={<Home isDarkMode={isDarkMode}/>} />
-                            <Route path="/projects/project1" element={<Project1/>} />
+                            <Route path="/projects/ps5-barcode-scanner" element={<PS5Project/>} />
+                            <Route path="/projects/ps6-zephyr-safety" element={<PS6Project/>} />
                             <Route path="/resume" element={<Resume/>} />
-                            <Route path="/experiences" element={<Experiences isDarkMode={isDarkMode}/>} />
-                            <Route path="/objectives" element={<Objectives/>} />
+                            <Route path="/formation" element={<Formation isDarkMode={isDarkMode}/>} />
+                            <Route path="/technologies" element={<Technologies/>} />
+                            <Route path="/skills" element={<Skills/>} />
                         </Routes>
                     </div>
 

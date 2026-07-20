@@ -126,11 +126,13 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
                 <Menu menuItemStyles={menuItemStyles}>
                     {activeTab === 'files' && (
                         <>
-                            <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}> resume.pdf </MenuItem>
-                            <MenuItem component={<Link to="/experiences" />} icon={<FaFile/>}> experiences.tsx </MenuItem>
-                            <MenuItem component={<Link to="/objectives" />} icon={<FaFile/>}> objectives.tsx </MenuItem>
+                            <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}>resume</MenuItem>
+                            <MenuItem component={<Link to="/formation" />} icon={<FaFile/>}>formation</MenuItem>
+                            <MenuItem component={<Link to="/technologies" />} icon={<FaFile/>}>technologies</MenuItem>
+                            <MenuItem component={<Link to="/skills" />} icon={<FaFile/>}>skills</MenuItem>
                             <SubMenu label="projects" icon={<IoIosFolder />}>
-                                <MenuItem component={<Link to="/projects/project1" />} icon={<FaFile/>}> project1.tsx </MenuItem>
+                                <MenuItem component={<Link to="/projects/ps5-barcode-scanner" />} icon={<FaFile/>}>ps5-barcode-scanner</MenuItem>
+                                <MenuItem component={<Link to="/projects/ps6-zephyr-safety" />} icon={<FaFile/>}>ps6-zephyr-safety</MenuItem>
                             </SubMenu>
                         </>
                     )}
