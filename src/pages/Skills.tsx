@@ -1,149 +1,69 @@
 import * as React from "react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const skillsData = [
     {
         category: "Software Engineering & Architecture",
         skills: [
-            {
-                name: "Object-Oriented Analysis & Design (OOAD)",
-                description: "Proficiency in analyzing and designing systems using object-oriented principles."
-            },
-            {
-                name: "Design Patterns",
-                description: "Application of design patterns for creating flexible, reusable, and maintainable software."
-            },
-            {
-                name: "System Architecture",
-                description: "Designing scalable and robust system architectures for enterprise-level applications."
-            },
-            {
-                name: "Software Refactoring",
-                description: "Improving internal structure of existing software without changing its external behavior."
-            },
-            {
-                name: "Enterprise Information Systems (IS Integration)",
-                description: "Integrating heterogeneous software components and enterprise information systems."
-            },
-            {
-                name: "Software Optimization",
-                description: "Profiling and optimizing software for performance, memory usage, and resource efficiency."
-            }
+            { name: "Object-Oriented Analysis & Design (OOAD)" },
+            { name: "Design Patterns" },
+            { name: "System Architecture" },
+            { name: "Software Refactoring" },
+            { name: "Enterprise Information Systems (IS Integration)" },
+            { name: "Software Optimization" }
         ]
     },
     {
         category: "Programming Paradigms",
         skills: [
-            {
-                name: "Multi-paradigm Programming",
-                description: "Experience with Object-Oriented, Functional, and Concurrent programming paradigms."
-            },
-            {
-                name: "Advanced Java",
-                description: "In-depth knowledge of Java for building complex and high-performance applications."
-            },
-            {
-                name: "C/C++",
-                description: "Strong skills in C/C++ for systems and low-level programming."
-            },
-            {
-                name: "Systems & Low-Level Programming",
-                description: "Understanding of computer architecture, memory management, and OS internals."
-            }
+            { name: "Multi-paradigm Programming" },
+            { name: "Advanced Java" },
+            { name: "C/C++" },
+            { name: "Systems & Low-Level Programming" }
         ]
     },
     {
         category: "Web & Mobile Applications",
         skills: [
-            {
-                name: "Native/Cross-platform Mobile App Development",
-                description: "Building robust mobile applications with a focus on resource constraints and modern UI."
-            },
-            {
-                name: "Full-Stack Web Development",
-                description: "Developing both front-end and back-end components of web applications."
-            },
-            {
-                name: "REST APIs",
-                description: "Designing and implementing RESTful APIs for communication between services."
-            },
-            {
-                name: "Microservices",
-                description: "Building applications as a suite of small, independently deployable services."
-            },
-            {
-                name: "UI/UX Principles & Human-Machine Interaction (HMI)",
-                description: "Applying UI/UX best practices to create intuitive and user-friendly interfaces."
-            }
+            { name: "Native/Cross-platform Mobile App Development" },
+            { name: "Full-Stack Web Development" },
+            { name: "REST APIs" },
+            { name: "Microservices" },
+            { name: "UI/UX Principles & Human-Machine Interaction (HMI)" }
         ]
     },
     {
         category: "Data & Information Systems",
         skills: [
-            {
-                name: "Relational Databases",
-                description: "Proficiency in SQL, schema design, and performance tuning for relational databases."
-            },
-            {
-                name: "System & Data Security",
-                description: "Implementing security standards, threat modeling, and secure software development practices."
-            },
-            {
-                name: "Distributed Data Processing",
-                description: "Experience with processing large datasets in a distributed environment."
-            }
+            { name: "Relational Databases" },
+            { name: "System & Data Security" },
+            { name: "Distributed Data Processing" }
         ]
     },
     {
         category: "Systems & Infrastructure",
         skills: [
-            {
-                name: "Computer Architecture",
-                description: "Deep understanding of computer hardware and its interaction with software."
-            },
-            {
-                name: "Concurrent & Parallel Systems",
-                description: "Mastery of multithreading, process synchronization, and asynchronous execution."
-            },
-            {
-                name: "Operating Systems",
-                description: "Knowledge of operating system internals and concepts."
-            },
-            {
-                name: "Networking & Telecommunications",
-                description: "Understanding of network protocols and telecommunication systems."
-            }
+            { name: "Computer Architecture" },
+            { name: "Concurrent & Parallel Systems" },
+            { name: "Operating Systems" },
+            { name: "Networking & Telecommunications" }
         ]
     },
     {
         category: "Methodologies & Management",
         skills: [
-            {
-                name: "Agile/Scrum",
-                description: "Experience in Agile software development methodologies, including Scrum."
-            },
-            {
-                name: "Project Management (GPIT)",
-                description: "Knowledge of project management principles and practices."
-            },
-            {
-                name: "Version Control (Git)",
-                description: "Proficient in using Git for version control and collaborative development."
-            },
-            {
-                name: "IT Law & Economics",
-                description: "Understanding of legal and economic aspects of the IT industry."
-            },
-            {
-                name: "Collaborative Team Engineering",
-                description: "Experience in working effectively in a team-oriented engineering environment."
-            }
+            { name: "Agile/Scrum" },
+            { name: "Project Management (GPIT)" },
+            { name: "Version Control (Git)" },
+            { name: "IT Law & Economics" },
+            { name: "Collaborative Team Engineering" }
         ]
     }
 ];
 
 function Skills() {
-    const [openCategory, setOpenCategory] = useState<string | null>(null);
+    const [openCategory, setOpenCategory] = useState<string | null>(skillsData[0].category);
 
     const toggleCategory = (category: string) => {
         setOpenCategory(openCategory === category ? null : category);
@@ -151,27 +71,36 @@ function Skills() {
 
     return (
         <div style={skillsContainer}>
-            <h1>Skills</h1>
+            <h1 style={pageTitle}>Skills</h1>
             <div style={treeContainer}>
                 {skillsData.map((branch) => (
                     <div key={branch.category} style={categoryBranch}>
                         <h2 onClick={() => toggleCategory(branch.category)} style={categoryTitle}>
-                            {branch.category} {openCategory === branch.category ? '▾' : '▸'}
+                            <motion.div animate={{ rotate: openCategory === branch.category ? 90 : 0 }} style={arrowStyle}>▸</motion.div>
+                            {branch.category}
                         </h2>
-                        {openCategory === branch.category && (
-                            <div style={skillList}>
-                                {branch.skills.length > 0 ? (
-                                    branch.skills.map((skill, index) => (
-                                        <div key={skill.name} style={{...skillItem, borderBottom: index === branch.skills.length - 1 ? 'none' : '1px solid #333'}}>
-                                            <h3 style={skillName}>{skill.name}</h3>
-                                            <p style={skillDescription}>{skill.description}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No skills listed in this category yet.</p>
-                                )}
-                            </div>
-                        )}
+                        <AnimatePresence>
+                            {openCategory === branch.category && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    style={{ overflow: 'hidden' }}
+                                >
+                                    <div style={skillList}>
+                                        {branch.skills.length > 0 ? (
+                                            branch.skills.map((skill) => (
+                                                <div key={skill.name} style={skillItem}>
+                                                    <span style={skillName}>{skill.name}</span>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>No skills listed in this category yet.</p>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 ))}
             </div>
@@ -182,44 +111,60 @@ function Skills() {
 export default Skills;
 
 const skillsContainer: React.CSSProperties = {
-    maxWidth: "800px",
+    maxWidth: "900px",
     margin: "2rem auto",
-    padding: "0 1rem",
+    padding: "0 2rem",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+};
+
+const pageTitle: React.CSSProperties = {
+    textAlign: 'center',
+    fontSize: '2.5rem',
+    marginBottom: '3rem',
+    color: '#eee'
 };
 
 const treeContainer: React.CSSProperties = {
-    marginTop: "2rem",
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem'
 };
 
 const categoryBranch: React.CSSProperties = {
-    marginBottom: "1.5rem",
+    background: "#222",
+    borderRadius: "8px",
+    padding: "1rem 1.5rem",
 };
 
 const categoryTitle: React.CSSProperties = {
     cursor: "pointer",
     userSelect: "none",
-    fontSize: "1.5rem",
-    borderBottom: "1px solid #333",
-    paddingBottom: "0.5rem",
-    marginBottom: "1rem"
+    fontSize: "1.4rem",
+    display: 'flex',
+    alignItems: 'center',
+    color: '#ddd'
+};
+
+const arrowStyle: React.CSSProperties = {
+    marginRight: '1rem',
+    display: 'inline-block'
 };
 
 const skillList: React.CSSProperties = {
-    paddingLeft: "1rem",
+    paddingTop: "1rem",
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '0.75rem'
 };
 
 const skillItem: React.CSSProperties = {
-    padding: "1rem 0",
+    background: '#333',
+    padding: "0.5rem 1rem",
+    borderRadius: '5px',
 };
 
 const skillName: React.CSSProperties = {
     margin: 0,
-    marginBottom: '0.25rem',
-    fontSize: '1.1rem',
-};
-
-const skillDescription: React.CSSProperties = {
-    margin: 0,
-    color: '#aaa',
-    fontSize: '0.9rem',
+    fontSize: '1rem',
+    color: '#ccc'
 };

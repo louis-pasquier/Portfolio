@@ -1,156 +1,65 @@
 import * as React from "react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const technologyTree = [
     {
         category: "Web Development",
         technologies: [
-            {
-                name: "React",
-                description: "Extensive experience building dynamic and responsive user interfaces with React.",
-                url: "https://reactjs.org/"
-            },
-            {
-                name: "TypeScript",
-                description: "Leveraged TypeScript to build scalable and maintainable web applications with static typing.",
-                url: "https://www.typescriptlang.org/"
-            },
-            {
-                name: "VueJS",
-                description: "Gained experience with the Vue.js framework through dedicated coursework at HEIA-FR.",
-                url: "https://vuejs.org/"
-            },
+            { name: "React", url: "https://reactjs.org/" },
+            { name: "TypeScript", url: "https://www.typescriptlang.org/" },
+            { name: "VueJS", url: "https://vuejs.org/" },
         ]
     },
     {
         category: "Backend",
         technologies: [
-            {
-                name: "Spring Boot",
-                description: "Primary framework for building robust, high-performance backend services and REST APIs.",
-                url: "https://spring.io/projects/spring-boot"
-            },
-            {
-                name: "Python",
-                description: "Developed efficient backend services using Python with frameworks like FastAPI.",
-                url: "https://www.python.org/"
-            },
-            {
-                name: ".NET",
-                description: "Developed applications using the .NET framework for academic projects.",
-                url: "https://dotnet.microsoft.com/"
-            }
+            { name: "Spring Boot", url: "https://spring.io/projects/spring-boot" },
+            { name: "Python", url: "https://www.python.org/" },
+            { name: ".NET", url: "https://dotnet.microsoft.com/" }
         ]
     },
     {
         category: "Mobile App Development",
         technologies: [
-            {
-                name: "Flutter",
-                description: "Built cross-platform mobile applications with Flutter through comprehensive coursework, also exploring alternatives like Cordova, .NET MAUI, and KMP.",
-                url: "https://flutter.dev"
-            },
-            {
-                name: "Android (Java/Kotlin)",
-                description: "Developed native Android applications as part of a dedicated university course.",
-                url: "https://developer.android.com/"
-            },
-            {
-                name: "iOS (Swift)",
-                description: "Gained experience in native iOS development using Swift through a focused university course.",
-                url: "https://developer.apple.com/swift/"
-            },
-            {
-                name: "React Native",
-                description: "Utilized React Native for building cross-platform mobile apps in academic projects.",
-                url: "https://reactnative.dev/"
-            }
+            { name: "Flutter", url: "https://flutter.dev" },
+            { name: "Android (Java/Kotlin)", url: "https://developer.android.com/" },
+            { name: "iOS (Swift)", url: "https://developer.apple.com/swift/" },
+            { name: "React Native", url: "https://reactnative.dev/" }
         ]
     },
     {
         category: "Embedded Systems",
         technologies: [
-            {
-                name: "C",
-                description: "Utilized for low-level system programming and performance-critical applications in embedded environments.",
-                url: "https://en.wikipedia.org/wiki/C_(programming_language)"
-            },
-            {
-                name: "C++",
-                description: "Applied for object-oriented development on embedded systems, balancing high-level abstractions with performance.",
-                url: "https://isocpp.org/"
-            },
-            {
-                name: "Mbed OS",
-                description: "Developed applications on Arm's Mbed OS, focusing on IoT devices and connectivity.",
-                url: "https://os.mbed.com/"
-            },
-            {
-                name: "Zephyr RTOS",
-                description: "Experience with Zephyr, a scalable and secure real-time operating system for resource-constrained devices.",
-                url: "https://www.zephyrproject.org/"
-            }
+            { name: "C", url: "https://en.wikipedia.org/wiki/C_(programming_language)" },
+            { name: "C++", url: "https://isocpp.org/" },
+            { name: "Mbed OS", url: "https://os.mbed.com/" },
+            { name: "Zephyr RTOS", url: "https://www.zephyrproject.org/" }
         ]
     },
     {
         category: "Databases",
         technologies: [
-            {
-                name: "PostgreSQL",
-                description: "Designed and managed relational database schemas, writing complex SQL queries and ensuring data integrity.",
-                url: "https://www.postgresql.org/"
-            },
-            {
-                name: "MySQL",
-                description: "Experience with MySQL for web application backends and data storage solutions.",
-                url: "https://www.mysql.com/"
-            },
-            {
-                name: "Oracle DB",
-                description: "Worked with Oracle Database for enterprise-level data management during academic projects.",
-                url: "https://www.oracle.com/database/"
-            }
+            { name: "PostgreSQL", url: "https://www.postgresql.org/" },
+            { name: "MySQL", url: "https://www.mysql.com/" },
+            { name: "Oracle DB", url: "https://www.oracle.com/database/" }
         ]
     },
     {
         category: "System & DevOps",
         technologies: [
-            {
-                name: "Windows Server",
-                description: "Managed and administered Windows Server environments, including services like Active Directory, during my time at EMF.",
-                url: "https://www.microsoft.com/en-us/windows-server"
-            },
-            {
-                name: "Linux",
-                description: "Proficient in using and administering Linux-based systems (e.g., Ubuntu, CentOS) for development and deployment.",
-                url: "https://www.linux.org/"
-            },
-            {
-                name: "Gitlab",
-                description: "Utilized Gitlab for source code management, CI/CD pipelines, and collaborative project tracking.",
-                url: "https://about.gitlab.com/"
-            },
-            {
-                name: "Github",
-                description: "Experienced in using Github for version control, code reviews, and open-source collaboration.",
-                url: "https://github.com/"
-            },
-            {
-                name: "Jelastic",
-                description: "Deployed and managed applications on the Jelastic cloud platform, leveraging its PaaS capabilities.",
-                url: "https://jelastic.com/"
-            },
-            {
-                name: "Kubernetes",
-                description: "Gained foundational knowledge in container orchestration with Kubernetes for deploying and scaling applications.",
-                url: "https://kubernetes.io/"
-            }
+            { name: "Windows Server", url: "https://www.microsoft.com/en-us/windows-server" },
+            { name: "Linux", url: "https://www.linux.org/" },
+            { name: "Gitlab", url: "https://about.gitlab.com/" },
+            { name: "Github", url: "https://github.com/" },
+            { name: "Jelastic", url: "https://jelastic.com/" },
+            { name: "Kubernetes", url: "https://kubernetes.io/" }
         ]
     },
 ];
 
 function Technologies() {
-    const [openCategory, setOpenCategory] = useState<string | null>(null);
+    const [openCategory, setOpenCategory] = useState<string | null>(technologyTree[0].category);
 
     const toggleCategory = (category: string) => {
         setOpenCategory(openCategory === category ? null : category);
@@ -158,29 +67,36 @@ function Technologies() {
 
     return (
         <div style={technologiesContainer}>
-            <h1>Technologies</h1>
+            <h1 style={pageTitle}>Technologies</h1>
             <div style={treeContainer}>
                 {technologyTree.map((branch) => (
                     <div key={branch.category} style={categoryBranch}>
                         <h2 onClick={() => toggleCategory(branch.category)} style={categoryTitle}>
-                            {branch.category} {openCategory === branch.category ? '▾' : '▸'}
+                            <motion.div animate={{ rotate: openCategory === branch.category ? 90 : 0 }} style={arrowStyle}>▸</motion.div>
+                            {branch.category}
                         </h2>
-                        {openCategory === branch.category && (
-                            <div style={techList}>
-                                {branch.technologies.length > 0 ? (
-                                    branch.technologies.map((tech, index) => (
-                                        <div key={tech.name} style={{...techItem, borderBottom: index === branch.technologies.length - 1 ? 'none' : '1px solid #333'}}>
-                                            <a href={tech.url} target="_blank" rel="noopener noreferrer" style={techLink}>
-                                                <h3 style={techName}>{tech.name}</h3>
-                                                <p style={techDescription}>{tech.description}</p>
-                                            </a>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No technologies listed in this category yet.</p>
-                                )}
-                            </div>
-                        )}
+                        <AnimatePresence>
+                            {openCategory === branch.category && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    style={{ overflow: 'hidden' }}
+                                >
+                                    <div style={techList}>
+                                        {branch.technologies.length > 0 ? (
+                                            branch.technologies.map((tech) => (
+                                                <a href={tech.url} target="_blank" rel="noopener noreferrer" key={tech.name} style={techItem}>
+                                                    <span style={techName}>{tech.name}</span>
+                                                </a>
+                                            ))
+                                        ) : (
+                                            <p>No technologies listed in this category yet.</p>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 ))}
             </div>
@@ -191,49 +107,62 @@ function Technologies() {
 export default Technologies;
 
 const technologiesContainer: React.CSSProperties = {
-    maxWidth: "800px",
+    maxWidth: "900px",
     margin: "2rem auto",
-    padding: "0 1rem",
+    padding: "0 2rem",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+};
+
+const pageTitle: React.CSSProperties = {
+    textAlign: 'center',
+    fontSize: '2.5rem',
+    marginBottom: '3rem',
+    color: '#eee'
 };
 
 const treeContainer: React.CSSProperties = {
-    marginTop: "2rem",
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem'
 };
 
 const categoryBranch: React.CSSProperties = {
-    marginBottom: "1.5rem",
+    background: "#222",
+    borderRadius: "8px",
+    padding: "1rem 1.5rem",
 };
 
 const categoryTitle: React.CSSProperties = {
     cursor: "pointer",
     userSelect: "none",
-    fontSize: "1.5rem",
-    borderBottom: "1px solid #333",
-    paddingBottom: "0.5rem",
-    marginBottom: "1rem"
+    fontSize: "1.4rem",
+    display: 'flex',
+    alignItems: 'center',
+    color: '#ddd'
+};
+
+const arrowStyle: React.CSSProperties = {
+    marginRight: '1rem',
+    display: 'inline-block'
 };
 
 const techList: React.CSSProperties = {
-    paddingLeft: "1rem",
+    paddingTop: "1rem",
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '0.75rem'
 };
 
 const techItem: React.CSSProperties = {
-    padding: "1rem 0",
-};
-
-const techLink: React.CSSProperties = {
+    background: '#333',
+    padding: "0.5rem 1rem",
+    borderRadius: '5px',
     textDecoration: 'none',
-    color: 'inherit',
+    color: '#ccc',
+    transition: 'background-color 0.2s',
 };
 
 const techName: React.CSSProperties = {
     margin: 0,
-    marginBottom: '0.25rem',
-    fontSize: '1.1rem',
-};
-
-const techDescription: React.CSSProperties = {
-    margin: 0,
-    color: '#aaa',
-    fontSize: '0.9rem',
+    fontSize: '1rem',
 };
