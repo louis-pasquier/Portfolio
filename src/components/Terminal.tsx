@@ -7,6 +7,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 interface TerminalProps {
     isDarkMode: boolean;
     toggleDarkMode: () => void;
+    language: string;
+    changeLanguage: (language: string) => void;
 }
 
 interface Command {
@@ -14,7 +16,7 @@ interface Command {
     execute: (args: string[]) => void,
 }
 
-export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
+export default function Terminal({isDarkMode, toggleDarkMode, language, changeLanguage}: TerminalProps) {
 
     const location = useLocation();
     const newCommand: string = 'user:~' + location.pathname + '$ ';
@@ -67,21 +69,29 @@ export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
     commands.set('lang', {
         description: "Change language (en of fr)",
         execute: args => {
-            if ((args[0] === 'en' && !isDarkMode)
-                || (args[0] === 'light' && isDarkMode)) {
-                toggleDarkMode()
+            if ((args[0] === 'en' && language === 'fr')
+                || (args[0] === 'fr' && language === 'en')) {
+                changeLanguage(args[0])
             }
         }
     })
 
     commands.set('cd', {
-        description: "Change location",
+        description: "Change directory. Usage: cd [path|..|home]",
         execute: args => {
-            let path = args[0]
-            if (path == 'home') {
-                path = ''
+            const path = args[0];
+
+            if (path === '..') {
+                const { pathname } = location;
+                if (pathname === '/') return; // Already at root
+                const newPath = pathname.substring(0, pathname.lastIndexOf('/')) || '/';
+                navigate(newPath);
+            } else if (path === 'home' || path === '~' || !path) {
+                navigate('/');
+            } else {
+                // This will handle absolute paths like '/resume' and relative paths from current location
+                navigate(path);
             }
-            navigate(path);
         }
     })
 
@@ -95,6 +105,44 @@ export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
+    };
+
+    const handleTabCompletion = () => {
+        const [commandName, ...args] = content.split(' ');
+
+        if (args.length > 0) {
+            return;
+        }
+
+        const currentInput = commandName.trim();
+        if (!currentInput) {
+            return;
+        }
+
+        const commandList = Array.from(commands.keys());
+        const possibleCompletions = commandList.filter(cmd => cmd.startsWith(currentInput));
+
+        if (possibleCompletions.length === 1) {
+            setContent(possibleCompletions[0] + ' ');
+        } else if (possibleCompletions.length > 1) {
+            let lcp = '';
+            const first = possibleCompletions[0];
+            for (let i = 0; i < first.length; i++) {
+                const prefix = first.substring(0, i + 1);
+                if (possibleCompletions.every(c => c.startsWith(prefix))) {
+                    lcp = prefix;
+                } else {
+                    break;
+                }
+            }
+
+            if (lcp.length > currentInput.length) {
+                setContent(lcp);
+            } else {
+                printTerminal(newCommand + content);
+                printTerminal(possibleCompletions.join('    '));
+            }
+        }
     };
 
     const handleInputSubmit = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -119,6 +167,9 @@ export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
                 setCmdHistoryIndex(cmdHistory.length);
                 setContent('');
             }
+        } else if (event.key === 'Tab') {
+            event.preventDefault();
+            handleTabCompletion();
         }
     };
 

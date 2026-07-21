@@ -19,6 +19,12 @@ function App() {
         setLanguage(prevLanguage => (prevLanguage === 'en' ? 'fr' : 'en'));
     };
 
+    const changeLanguage = (lang: string) => {
+        if (lang === 'en' || lang === 'fr') {
+            setLanguage(lang);
+        }
+    };
+
     const theme = {
         background: isDarkMode ? '#1e1e1e' : '#ffffff',
         text: isDarkMode ? '#e0e0e0' : '#333333',
@@ -63,7 +69,12 @@ function App() {
                     </div>
 
                     {isTerminalOpen && (
-                        <Terminal isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)}/>
+                        <Terminal
+                            isDarkMode={isDarkMode}
+                            toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+                            language={language}
+                            changeLanguage={changeLanguage}
+                        />
                     )}
 
                 </div>
