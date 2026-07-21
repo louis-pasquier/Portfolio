@@ -1,145 +1,191 @@
 import React from "react";
+import { motion, type Variants } from "framer-motion";
 
 type FormationEvent = {
     id: number;
     title: string;
     description: string;
-    date: string;
+    startDate: number;
+    endDate?: number | string;
 };
 
-const events: FormationEvent[] = [
-    {
-        id: 1,
-        title: "Started EMF",
-        description: "CFC and maturity in computer science",
-        date: "2019",
+const translations = {
+    en: {
+        pageTitle: "My Journey",
+        present: "Present",
+        event1_title: "CFC & Technical Maturity in Computer Science",
+        event1_desc: "Completed my apprenticeship and technical maturity at EMF, Fribourg.",
+        event2_title: "Student job in elderly home",
+        event2_desc: "Student Job in Housekeeping at the St. Joseph Morlon Residence",
+        event3_title: "Internship at Fair-IT",
+        event3_desc: "Final year internship focusing on full-stack development and enterprise solutions.",
+        event4_title: "Bachelor of Science in Computer Science",
+        event4_desc: "Currently studying at the School of Engineering and Architecture of Fribourg (HEIA-FR).",
+        event5_title: "Student Job as Climbing Instructor",
+        event5_desc: "Teaching weekly climbing lessons at L'Entrepot, Bulle.",
     },
-    {
-        id: 2,
-        title: "Student job in elderly residence",
-        description: "Student job at St-Joseph Morlon residence",
-        date: "2022",
-    },
-    {
-        id: 3,
-        title: "Fair-IT internship",
-        description: "Final year of EMF completed as an internship at Fair-IT",
-        date: "2022",
-    },
-    {
-        id: 4,
-        title: "Started HEIA-FR",
-        description: "Bachelor in computer science",
-        date: "2023",
-    },
-    {
-        id: 5,
-        title: "Student job as a climbing instructor",
-        description: "Weekly lessons as a climbing instructor at l'Entrepot",
-        date: "2023",
-    },
-];
+    fr: {
+        pageTitle: "Mon Parcours",
+        present: "Aujourd'hui",
+        event1_title: "CFC & Maturité Technique en Informatique",
+        event1_desc: "Apprentissage et maturité technique terminés à l'EMF, Fribourg.",
+        event2_title: "Job étudiant en EMS",
+        event2_desc: "Job étudiant en intendance à la Résidence St. Joseph Morlon.",
+        event3_title: "Stage chez Fair-IT",
+        event3_desc: "Stage de fin d'études axé sur le développement full-stack et les solutions d'entreprise.",
+        event4_title: "Bachelor of Science en Informatique",
+        event4_desc: "Actuellement en études à la Haute école d'ingénierie et d'architecture de Fribourg (HEIA-FR).",
+        event5_title: "Job étudiant comme moniteur d'escalade",
+        event5_desc: "Donne des cours hebdomadaires d'escalade à L'Entrepot, Bulle.",
+    }
+};
 
-function Formation({ isDarkMode }: {isDarkMode: boolean}) {
+function Formation({ isDarkMode, language }: { isDarkMode: boolean, language: string }) {
+    const t = language === 'fr' ? translations.fr : translations.en;
+
     const theme = {
-        background: isDarkMode ? "#1e1e1e" : "#ffffff",
-        text: isDarkMode ? "#e0e0e0" : "#333333",
+        pageContainer: {
+            color: isDarkMode ? "#eee" : "#333",
+        },
+        line: {
+            backgroundColor: isDarkMode ? "#333" : "#ddd",
+        },
+        dot: {
+            backgroundColor: "#6366f1",
+            border: `3px solid ${isDarkMode ? "#1e1e1e" : "#fff"}`,
+        },
+        card: {
+            background: isDarkMode ? "#222" : "#f9f9f9",
+            border: `1px solid ${isDarkMode ? "#333" : "#ddd"}`,
+        },
+        cardTitle: {
+            color: isDarkMode ? "#ddd" : "#333",
+        },
+        cardDescription: {
+            color: isDarkMode ? "#aaa" : "#666",
+        }
     };
 
-    const containerStyle: React.CSSProperties = {
-        position: "relative",
-        padding: "60px 0",
-        width: "100%",
-        background: theme.background,
-        color: theme.text,
-        transition: "all 0.3s ease",
+    const events: FormationEvent[] = [
+        { id: 1, title: t.event1_title, description: t.event1_desc, startDate: 2019, endDate: 2023 },
+        { id: 2, title: t.event2_title, description: t.event2_desc, startDate: 2020, endDate: 2023 },
+        { id: 3, title: t.event3_title, description: t.event3_desc, startDate: 2022, endDate: 2023 },
+        { id: 4, title: t.event4_title, description: t.event4_desc, startDate: 2023, endDate: t.present },
+        { id: 5, title: t.event5_title, description: t.event5_desc, startDate: 2023, endDate: t.present },
+    ];
+
+    const containerVariants: Variants = {
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.3 } },
     };
 
-    const lineStyle: React.CSSProperties = {
-        position: "absolute",
-        left: "50%",
-        top: 0,
-        bottom: 0,
-        width: "4px",
-        backgroundColor: isDarkMode ? "#444" : "#ddd",
-        transform: "translateX(-50%)",
-    };
-
-    const eventContainer = (isLeft: boolean): React.CSSProperties => ({
-        position: "relative",
-        width: "50%",
-        padding: "20px 40px",
-        boxSizing: "border-box",
-        left: isLeft ? 0 : "50%",
-        textAlign: isLeft ? "right" : "left",
-    });
-
-    const cardStyle: React.CSSProperties = {
-        background: isDarkMode ? "#2a2a2a" : "#ffffff",
-        color: theme.text,
-        padding: "18px 22px",
-        borderRadius: "10px",
-        display: "inline-block",
-        maxWidth: "320px",
-        boxShadow: isDarkMode
-            ? "0 4px 12px rgba(0,0,0,0.6)"
-            : "0 4px 12px rgba(0,0,0,0.1)",
-        border: isDarkMode ? "1px solid #333" : "1px solid #eee",
-        transition: "all 0.3s ease",
-    };
-
-    const dotBase: React.CSSProperties = {
-        position: "absolute",
-        top: "28px",
-        width: "16px",
-        height: "16px",
-        borderRadius: "50%",
-        backgroundColor: isDarkMode ? "#6366f1" : "#4f46e5",
-        border: `3px solid ${theme.background}`,
-        zIndex: 1,
-    };
-
-    const dotLeft: React.CSSProperties = {
-        ...dotBase,
-        right: "-8px",
-    };
-
-    const dotRight: React.CSSProperties = {
-        ...dotBase,
-        left: "-8px",
+    const itemVariants: Variants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
     };
 
     return (
-        <div style={containerStyle}>
-            <div style={lineStyle}></div>
-
-            {events.map((event, index) => {
-                const isLeft = index % 2 === 0;
-
-                return (
-                    <div key={event.id} style={eventContainer(isLeft)}>
-                        <div style={isLeft ? dotLeft : dotRight}></div>
-
-                        <div style={cardStyle}>
-                            <h3 style={{ margin: "0 0 8px 0" }}>{event.title}</h3>
-                            <p style={{ margin: "0 0 10px 0", fontSize: "14px" }}>
-                                {event.description}
-                            </p>
-                            <span
-                                style={{
-                                    fontSize: "12px",
-                                    opacity: 0.7,
-                                }}
-                            >
-                {event.date}
-              </span>
-                        </div>
-                    </div>
-                );
-            })}
+        <div style={{ ...pageContainer, ...theme.pageContainer }}>
+            <h1 style={pageTitle}>{t.pageTitle}</h1>
+            <div style={timelineContainer}>
+                <div style={{ ...lineStyle, ...theme.line }}></div>
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                >
+                    {events.map((event, index) => {
+                        const isLeft = index % 2 === 0;
+                        return (
+                            <motion.div key={event.id} variants={itemVariants} style={eventWrapper(isLeft)}>
+                                <div style={{ ...dotStyle(isLeft), ...theme.dot }}></div>
+                                <div style={{ ...cardStyle, ...theme.card }}>
+                                    <h3 style={{...cardTitle, ...theme.cardTitle}}>{event.title}</h3>
+                                    <p style={{...cardDescription, ...theme.cardDescription}}>{event.description}</p>
+                                    <span style={dateStyle}>
+                                        {event.startDate} {event.endDate ? ` - ${event.endDate}` : ''}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </motion.div>
+            </div>
         </div>
     );
 }
 
 export default Formation;
 
+// Styles
+const pageContainer: React.CSSProperties = {
+    maxWidth: "900px",
+    margin: "2rem auto",
+    padding: "2rem",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+};
+
+const pageTitle: React.CSSProperties = {
+    textAlign: 'center',
+    fontSize: '2.5rem',
+    marginBottom: '4rem',
+};
+
+const timelineContainer: React.CSSProperties = {
+    position: "relative",
+    padding: "20px 0",
+};
+
+const lineStyle: React.CSSProperties = {
+    position: "absolute",
+    left: "50%",
+    top: 0,
+    bottom: 0,
+    width: "3px",
+    transform: "translateX(-50%)",
+};
+
+const eventWrapper = (isLeft: boolean): React.CSSProperties => ({
+    position: "relative",
+    width: "50%",
+    padding: `0 40px`,
+    boxSizing: "border-box",
+    left: isLeft ? 0 : "50%",
+    textAlign: isLeft ? "right" : "left",
+    marginBottom: "40px",
+});
+
+const dotStyle = (isLeft: boolean): React.CSSProperties => ({
+    position: "absolute",
+    top: "5px",
+    width: "15px",
+    height: "15px",
+    borderRadius: "50%",
+    zIndex: 1,
+    ...(isLeft ? { right: "-8.5px" } : { left: "-6.5px" }),
+});
+
+const cardStyle: React.CSSProperties = {
+    padding: "20px 25px",
+    borderRadius: "10px",
+    display: "inline-block",
+    position: "relative",
+};
+
+const cardTitle: React.CSSProperties = {
+    margin: "0 0 10px 0",
+    fontSize: "1.2rem",
+};
+
+const cardDescription: React.CSSProperties = {
+    margin: "0 0 12px 0",
+    fontSize: "0.95rem",
+    lineHeight: 1.5,
+};
+
+const dateStyle: React.CSSProperties = {
+    fontSize: "0.85rem",
+    color: "#6366f1",
+    fontWeight: "bold",
+};

@@ -64,6 +64,16 @@ export default function Terminal({isDarkMode, toggleDarkMode}: TerminalProps) {
         }
     })
 
+    commands.set('lang', {
+        description: "Change language (en of fr)",
+        execute: args => {
+            if ((args[0] === 'en' && !isDarkMode)
+                || (args[0] === 'light' && isDarkMode)) {
+                toggleDarkMode()
+            }
+        }
+    })
+
     commands.set('cd', {
         description: "Change location",
         execute: args => {

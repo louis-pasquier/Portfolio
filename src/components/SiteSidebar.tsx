@@ -13,6 +13,8 @@ interface SiteSidebarProps {
     toggleTerminal: () => void;
     isDarkMode: boolean;
     toggleDarkMode: () => void;
+    language: string;
+    toggleLanguage: () => void;
 }
 
 interface ActivityIconProps {
@@ -22,9 +24,28 @@ interface ActivityIconProps {
     isDarkMode: boolean;
 }
 
-function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMode }: SiteSidebarProps) {
+function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMode, language, toggleLanguage }: SiteSidebarProps) {
     const [activeTab, setActiveTab] = useState<TabId | null>(null);
     const navigate = useNavigate();
+
+    const translations = {
+        en: {
+            files: 'FILES',
+            resume: 'resume',
+            formation: 'formation',
+            skills: 'skills',
+            projects: 'projects',
+        },
+        fr: {
+            files: 'FICHIERS',
+            resume: 'cv',
+            formation: 'formation',
+            skills: 'compétences',
+            projects: 'projets',
+        }
+    };
+
+    const t = language === 'fr' ? translations.fr : translations.en;
 
     const theme = {
         activityBarBg: isDarkMode ? '#1e1e1e' : '#f0f0f0',
@@ -95,6 +116,13 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
                 <ActivityIcon
                     isDarkMode={isDarkMode}
                     isActive={false}
+                    onClick={toggleLanguage}
+                    icon={<div style={{ fontSize: '18px' }}>{language === 'en' ? 'EN' : 'FR'}</div>}
+                />
+
+                <ActivityIcon
+                    isDarkMode={isDarkMode}
+                    isActive={false}
                     onClick={toggleDarkMode}
                     icon={isDarkMode ? <MdLightMode size={24} /> : <MdDarkMode size={24} />}
                 />
@@ -120,17 +148,16 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
                 }}
             >
                 <div style={{ padding: '10px', fontWeight: 'bold', color: theme.text }}>
-                    {activeTab?.toUpperCase()}
+                    {activeTab === 'files' ? t.files : ''}
                 </div>
 
                 <Menu menuItemStyles={menuItemStyles}>
                     {activeTab === 'files' && (
                         <>
-                            <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}>resume</MenuItem>
-                            <MenuItem component={<Link to="/formation" />} icon={<FaFile/>}>formation</MenuItem>
-                            <MenuItem component={<Link to="/technologies" />} icon={<FaFile/>}>technologies</MenuItem>
-                            <MenuItem component={<Link to="/skills" />} icon={<FaFile/>}>skills</MenuItem>
-                            <SubMenu label="projects" icon={<IoIosFolder />}>
+                            <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}>{t.resume}</MenuItem>
+                            <MenuItem component={<Link to="/formation" />} icon={<FaFile/>}>{t.formation}</MenuItem>
+                            <MenuItem component={<Link to="/skills" />} icon={<FaFile/>}>{t.skills}</MenuItem>
+                            <SubMenu label={t.projects} icon={<IoIosFolder />}>
                                 <MenuItem component={<Link to="/projects/ps5-barcode-scanner" />} icon={<FaFile/>}>ps5-barcode-scanner</MenuItem>
                                 <MenuItem component={<Link to="/projects/ps6-zephyr-safety" />} icon={<FaFile/>}>ps6-zephyr-safety</MenuItem>
                             </SubMenu>
@@ -158,6 +185,8 @@ const ActivityIcon: React.FC<ActivityIconProps> = ({ icon, onClick, isActive, is
                 boxSizing: 'border-box',
                 display: 'flex',
                 justifyContent: 'center',
+                alignItems: 'center',
+                height: '50px',
                 transition: 'all 0.2s'
             }}
         >

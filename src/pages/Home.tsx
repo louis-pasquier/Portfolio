@@ -2,14 +2,25 @@ import * as React from "react";
 import { SocialIcon } from 'react-social-icons'
 import PolyBackground from "../components/PolyBackground.tsx";
 
-export default function Home ({ isDarkMode }: { isDarkMode: boolean }) {
+export default function Home ({ isDarkMode, language }: { isDarkMode: boolean, language: string }) {
+
+    const translations = {
+        en: {
+            welcome: 'Welcome to my portfolio',
+        },
+        fr: {
+            welcome: 'Bienvenue sur mon portfolio',
+        }
+    };
+
+    const t = language === 'fr' ? translations.fr : translations.en;
 
     return (
         <PolyBackground isDarkMode={isDarkMode}>
             <div style={main}>
                 <div style={contentWrapper}>
                     <div style={titleWrapper}>
-                        <div style={title}>Welcome to my portfolio</div>
+                        <div style={title}>{t.welcome}</div>
                         <div style={subTitle}>
                             Louis Pasquier
                         </div>
