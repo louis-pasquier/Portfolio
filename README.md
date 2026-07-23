@@ -1,10 +1,13 @@
 # ✨ Portfolio ✨
 
 Hi ! I am Louis Pasquier and this is my portfolio.
-
-🚧⚠️ This portfolio is currently under development ⚠️🚧
+The website is available at this URL : https://louisme.ch
 
 # ℹ️ Info
+
+Update dependencies :
+
+    npm install
 
 Run the project :
 
