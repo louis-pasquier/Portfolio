@@ -7,13 +7,26 @@ import PS5Project from "./pages/projects/PS5Project.tsx";
 import PS6Project from "./pages/projects/PS6Project.tsx";
 import Resume from "./pages/Resume.tsx";
 import Skills from "./pages/Skills.tsx";
-import resumeUrl from './assets/resume.pdf';
 import Formation from "./pages/Formation.tsx";
 
 function App() {
     const [isTerminalOpen, setIsTerminalOpen] = useState(true);
-    const [isDarkMode, setIsDarkMode] = useState(true);
-    const [language, setLanguage] = useState('en');
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const savedMode = localStorage.getItem('isDarkMode');
+        return savedMode ? JSON.parse(savedMode) : true;
+    });
+    const [language, setLanguage] = useState(() => {
+        const savedLang = localStorage.getItem('language');
+        return savedLang ? savedLang : 'en';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
+    }, [isDarkMode]);
+
+    useEffect(() => {
+        localStorage.setItem('language', language);
+    }, [language]);
 
     const toggleLanguage = () => {
         setLanguage(prevLanguage => (prevLanguage === 'en' ? 'fr' : 'en'));
@@ -29,10 +42,6 @@ function App() {
         background: isDarkMode ? '#1e1e1e' : '#ffffff',
         text: isDarkMode ? '#e0e0e0' : '#333333',
     };
-
-    useEffect(() => {
-        fetch(resumeUrl);
-    }, []);
 
     return (
         <BrowserRouter>

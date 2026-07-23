@@ -3,31 +3,31 @@ import * as React from 'react';
 const translations = {
     en: {
         title: "Semester 5 Project: Barcode Scanners for Inventory Management",
-        info: "Academic and Client Information: This project was carried out by Louis Pasquier during the 5th semester (2025/2026) in the Computer Science and Communication Systems program at HEIA-FR, under the supervision of Jacques Supcik and Frédéric Bapst. The project was commissioned by Mr. Sawwaf, director of the Albert le Grand bookstore.",
+        info: "Academic and Client Information: This project was carried out during the 5th semester (2025) in the Computer Science and Communication Systems program at HEIA-FR, under the supervision of Jacques Supcik and Frédéric Bapst. The project was commissioned by Mr. Sawwaf, director of the Albert le Grand bookstore.",
         overviewTitle: "Project Overview",
         overviewText: "This project aimed to modernize a bookstore's inventory management by developing new firmware for a barcode scanner based on a C SDK. In parallel, new data transfer software was designed to retrieve scanned information via Bluetooth or a wired station, with a strong portability constraint across modern operating systems (Mac, Linux, Windows).",
         responsibilitiesTitle: "Key Responsibilities and Applied Skills",
         resp1: "Embedded Firmware Development: Added new features to the scanner such as quantity entry after a scan, improved error correction (scrolling up the list from the end), and using the scanner as a keyboard.",
         resp2: "Bluetooth Communication: Analysis and integration of Bluetooth HDI (Human Interface Device) and SPP (Serial Port Profile) profiles to ensure wireless data transmission to the PC.",
-        resp3: "Transfer Tool Development: Chose and used the Go language to design the data reception software, selected for its high portability and ease of installation compared to alternatives like Java or Python.",
+        resp3: "Transfer Tool Development: Chose and used the Go language to design the data reception software, selected for its high portability and ease of installation.",
         resp4: "Reverse Engineering and Linux Portability: Decompiled a Windows checksum tool (.exe) using Ghidra to make the firmware compilation compatible with Linux. The identified algorithm was then reconstructed in Python.",
         resp5: "Software Design: Modeled the software architecture through use-case UML diagrams to clearly define user interactions with the scanner and the PC software.",
         techTitle: "Technologies Used",
-        techText: "C (SDK), Go, Python, Ghidra, Bluetooth (HDI & SPP Profiles), UML."
+        techText: "C (SDK), Go, Python, Ghidra, Bluetooth (HDI & SPP Profiles), Homebrew."
     },
     fr: {
         title: "Projet de Semestre 5 : Lecteurs de codes barres pour gestion de stock",
-        info: "Informations académiques et mandant : Ce projet a été réalisé par Louis Pasquier lors du semestre 5 (2025/2026) au sein de la filière Informatique et Systèmes de Communication de la HEIA-FR, sous la supervision de Jacques Supcik et Frédéric Bapst. Le projet a été commandité par M. Sawwaf, directeur de la librairie Albert le Grand.",
+        info: "Informations académiques et mandant : Ce projet a été réalisé lors du semestre 5 (2025) au sein de la filière Informatique et Systèmes de Communication de la HEIA-FR, sous la supervision de Jacques Supcik et Frédéric Bapst. Le projet a été commandité par M. Sawwaf, directeur de la librairie Albert le Grand.",
         overviewTitle: "Aperçu du projet",
         overviewText: "Ce projet visait à moderniser la gestion de stock d'une librairie en développant un nouveau firmware pour un lecteur de codes-barres basé sur un SDK en C. En parallèle, un nouveau logiciel de transfert de données a été conçu pour récupérer les informations scannées via Bluetooth ou via une station filaire, avec une forte contrainte de portabilité sur des systèmes d'exploitation récents (Mac, Linux, Windows).",
         responsibilitiesTitle: "Responsabilités clés et compétences appliquées",
         resp1: "Développement de Firmware embarqué : Ajout de nouvelles fonctionnalités sur le scanner telles que la saisie de la quantité après un scan, l'amélioration de la correction d'erreurs (remontée de la liste depuis la fin), et l'utilisation de la douchette comme clavier.",
         resp2: "Communication Bluetooth : Analyse et intégration des profils Bluetooth HDI (Human Interface Device) et SPP (Serial Port Profile) pour assurer la transmission des données sans fil vers le PC.",
-        resp3: "Développement de l'outil de transfert : Choix et utilisation du langage Go pour concevoir le logiciel de réception des données, sélectionné pour son haut niveau de portabilité et sa facilité d'installation face à des alternatives comme Java ou Python.",
+        resp3: "Développement de l'outil de transfert : Choix et utilisation du langage Go pour concevoir le logiciel de réception des données, sélectionné pour son haut niveau de portabilité et sa facilité d'installation.",
         resp4: "Rétro-ingénierie et portabilité Linux : Décompilation d'un outil de checksum Windows (.exe) à l'aide de Ghidra afin de rendre la compilation du firmware compatible avec Linux. L'algorithme identifié a ensuite été reconstruit en Python.",
         resp5: "Conception logicielle : Modélisation de l'architecture logicielle à travers des diagrammes de cas d'utilisation (use-case UML) pour définir clairement les interactions de l'utilisateur avec le scanner et le logiciel PC.",
         techTitle: "Technologies utilisées",
-        techText: "C (SDK), Go, Python, Ghidra, Bluetooth (Profils HDI et SPP), UML."
+        techText: "C (SDK), Go, Python, Ghidra, Bluetooth (Profils HDI et SPP), Homebrew."
     }
 };
 
