@@ -7,7 +7,7 @@ import PS5Project from "./pages/projects/PS5Project.tsx";
 import PS6Project from "./pages/projects/PS6Project.tsx";
 import Resume from "./pages/Resume.tsx";
 import Skills from "./pages/Skills.tsx";
-import resumeUrl from './assets/resume.pdf';
+import resumeUrl from './assets/resume/resume.pdf';
 import Formation from "./pages/Formation.tsx";
 
 function App() {
