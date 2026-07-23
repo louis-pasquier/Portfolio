@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu, type MenuItemStyles } from 'react-pro-sidebar';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IoIosFolder, IoMdHome } from "react-icons/io";
 import { FaFile } from "react-icons/fa";
 import { VscFiles, VscTerminal } from "react-icons/vsc";
@@ -27,6 +27,7 @@ interface ActivityIconProps {
 function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMode, language, toggleLanguage }: SiteSidebarProps) {
     const [activeTab, setActiveTab] = useState<TabId | null>(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const translations = {
         en: {
@@ -74,9 +75,9 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
             '&:hover': {
                 backgroundColor: theme.hover,
             },
-            [`&.active`]: {
-                backgroundColor: '#13395e',
-                color: '#b6c8d9',
+            [`&.ps-active`]: {
+                backgroundColor: isDarkMode ? '#37373d' : '#e0e0e0',
+                color: isDarkMode ? '#fff' : '#333',
             },
         },
         subMenuContent: {
@@ -100,7 +101,7 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
             }}>
                 <ActivityIcon
                     isDarkMode={isDarkMode}
-                    isActive={false}
+                    isActive={location.pathname === '/'}
                     onClick={handleHomeClick}
                     icon={<IoMdHome size={28}/>}
                 />
@@ -154,12 +155,12 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
                 <Menu menuItemStyles={menuItemStyles}>
                     {activeTab === 'files' && (
                         <>
-                            <MenuItem component={<Link to="/resume" />} icon={<FaFile/>}>{t.resume}</MenuItem>
-                            <MenuItem component={<Link to="/formation" />} icon={<FaFile/>}>{t.formation}</MenuItem>
-                            <MenuItem component={<Link to="/skills" />} icon={<FaFile/>}>{t.skills}</MenuItem>
-                            <SubMenu label={t.projects} icon={<IoIosFolder />}>
-                                <MenuItem component={<Link to="/projects/ps5-barcode-scanner" />} icon={<FaFile/>}>ps5-barcode-scanner</MenuItem>
-                                <MenuItem component={<Link to="/projects/ps6-zephyr-safety" />} icon={<FaFile/>}>ps6-zephyr-safety</MenuItem>
+                            <MenuItem active={location.pathname === '/resume'} component={<Link to="/resume" />} icon={<FaFile/>}>{t.resume}</MenuItem>
+                            <MenuItem active={location.pathname === '/formation'} component={<Link to="/formation" />} icon={<FaFile/>}>{t.formation}</MenuItem>
+                            <MenuItem active={location.pathname === '/skills'} component={<Link to="/skills" />} icon={<FaFile/>}>{t.skills}</MenuItem>
+                            <SubMenu defaultOpen={location.pathname.startsWith('/projects')} label={t.projects} icon={<IoIosFolder />}>
+                                <MenuItem active={location.pathname === '/projects/ps5-barcode-scanner'} component={<Link to="/projects/ps5-barcode-scanner" />} icon={<FaFile/>}>ps5-barcode-scanner</MenuItem>
+                                <MenuItem active={location.pathname === '/projects/ps6-zephyr-safety'} component={<Link to="/projects/ps6-zephyr-safety" />} icon={<FaFile/>}>ps6-zephyr-safety</MenuItem>
                             </SubMenu>
                         </>
                     )}

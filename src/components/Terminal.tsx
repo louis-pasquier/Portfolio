@@ -23,17 +23,48 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
     const historyEndRef = useRef<null | HTMLDivElement>(null);
     const navigate = useNavigate();
 
+    const translations = {
+        en: {
+            welcome: 'Welcome to my portfolio',
+            navigate: 'Use this terminal to navigate in the website',
+            help: 'Type help to check out the commands',
+            helpDescription: "Display help for available commands",
+            themeDescription: "Change theme color",
+            langDescription: "Change language (en of fr)",
+            cdDescription: "Change directory. Usage: cd [path|..|home]",
+            lsDescription: "List directory contents",
+            availableCommands: "Available commands",
+            unknownCommand: "Unknown command",
+            typeHelp: "Type 'help' to see the list of commands."
+        },
+        fr: {
+            welcome: 'Bienvenue sur mon portfolio',
+            navigate: 'Utilisez ce terminal pour naviguer sur le site',
+            help: 'Tapez help pour voir les commandes disponibles',
+            helpDescription: "Affiche l'aide pour les commandes disponibles",
+            themeDescription: "Changer le thème de couleur",
+            langDescription: "Changer la langue (en ou fr)",
+            cdDescription: "Changer de répertoire. Usage: cd [chemin|..|home]",
+            lsDescription: "Lister le contenu du répertoire",
+            availableCommands: "Commandes disponibles",
+            unknownCommand: "Commande inconnue",
+            typeHelp: "Tapez 'help' pour voir la liste des commandes."
+        }
+    };
+
+    const t = language === 'fr' ? translations.fr : translations.en;
+
+    const welcomeMessages = [
+        t.welcome,
+        '',
+        t.navigate,
+        t.help,
+        ''
+    ];
+
     const [cmdHistoryIndex, setCmdHistoryIndex] = useState(0);
     const [cmdHistory, setCmdHistory] = useState<string[]>([]);
-
-    const [history, setHistory] = useState([
-        'Welcome to my portfolio',
-        '',
-        'Use this terminal to navigate in the website',
-        'Type help to check out the commands',
-        ''
-    ]);
-
+    const [history, setHistory] = useState<string[]>([]);
     const [content, setContent] = useState('');
 
     const theme = {
@@ -44,12 +75,26 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
         font: 'Consolas, "Courier New", monospace'
     };
 
+    const frPathMap: { [key: string]: string } = {
+        'cv': 'resume',
+        'compétences': 'skills',
+        'projets': 'projects',
+        'formation': 'formation'
+    };
+
+    const enPathMap: { [key: string]: string } = Object.fromEntries(Object.entries(frPathMap).map(([fr, en]) => [en, fr]));
+
+    const fileSystem: { [key: string]: string[] } = {
+        '/': ['resume', 'formation', 'skills', 'projects/'],
+        '/projects': ['ps5-barcode-scanner', 'ps6-zephyr-safety']
+    };
+
     const commands = new Map<string, Command>();
 
     commands.set('help', {
-        description: "Display help for available commands",
+        description: t.helpDescription,
         execute: () => {
-            printTerminal("Available commands");
+            printTerminal(t.availableCommands);
             commands.forEach((value, key) => {
                 printTerminal(`${key.padEnd(10)} : ${value.description}`);
             });
@@ -57,7 +102,7 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
     })
 
     commands.set('theme', {
-        description: "Change theme color",
+        description: t.themeDescription,
         execute: args => {
             if ((args[0] === 'dark' && !isDarkMode)
             || (args[0] === 'light' && isDarkMode)) {
@@ -67,7 +112,7 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
     })
 
     commands.set('lang', {
-        description: "Change language (en of fr)",
+        description: t.langDescription,
         execute: args => {
             if ((args[0] === 'en' && language === 'fr')
                 || (args[0] === 'fr' && language === 'en')) {
@@ -77,9 +122,15 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
     })
 
     commands.set('cd', {
-        description: "Change directory. Usage: cd [path|..|home]",
+        description: t.cdDescription,
         execute: args => {
-            const path = args[0];
+            let path = args[0];
+
+            if (language === 'fr') {
+                const pathParts = path.split('/');
+                const translatedParts = pathParts.map(part => frPathMap[part] || part);
+                path = translatedParts.join('/');
+            }
 
             if (path === '..') {
                 const { pathname } = location;
@@ -94,6 +145,29 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
             }
         }
     })
+
+    commands.set('ls', {
+        description: t.lsDescription,
+        execute: () => {
+            const { pathname } = location;
+            const normalizedPath = pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+            const listing = fileSystem[normalizedPath];
+
+            if (listing) {
+                let processedListing;
+                if (language === 'fr') {
+                    processedListing = listing.map(item => {
+                        const key = item.replace('/', '');
+                        const translated = enPathMap[key];
+                        return translated || key;
+                    });
+                } else {
+                    processedListing = listing.map(item => item.replace('/', ''));
+                }
+                printTerminal(processedListing.join('    '));
+            }
+        }
+    });
 
     useEffect(() => {
         scrollToBottom();
@@ -181,7 +255,7 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
         const command = commands.get(name);
 
         if (!command) {
-            printTerminal(`Unknown command : ${name}. Type 'help' to see the list of commands.`)
+            printTerminal(`${t.unknownCommand} : ${name}. ${t.typeHelp}`)
         }
 
         command?.execute(args)
@@ -211,6 +285,12 @@ export default function Terminal({isDarkMode, toggleDarkMode, language, changeLa
             >
                 <div style={contentWrapper}>
                     <div style={{ ...contentStyle, color: theme.text }}>
+                        {welcomeMessages.map((line, key) => (
+                            <span key={key}>
+                                {line}
+                                <br />
+                            </span>
+                        ))}
                         {history.map((line, key) => (
                             <span key={key}>
                                 {line}
