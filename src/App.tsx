@@ -44,10 +44,6 @@ function App() {
         text: isDarkMode ? '#e0e0e0' : '#333333',
     };
 
-    useEffect(() => {
-        fetch(resumeUrl);
-    }, []);
-
     return (
         <BrowserRouter>
             <div style={{
