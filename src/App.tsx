@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Terminal from "./components/Terminal.tsx";
 import Home from "./pages/Home.tsx";
 import SiteSidebar from "./components/SiteSidebar.tsx";
@@ -7,27 +7,12 @@ import PS5Project from "./pages/projects/PS5Project.tsx";
 import PS6Project from "./pages/projects/PS6Project.tsx";
 import Resume from "./pages/Resume.tsx";
 import Skills from "./pages/Skills.tsx";
-import resumeUrl from './assets/resume/resume.pdf';
 import Formation from "./pages/Formation.tsx";
 
 function App() {
     const [isTerminalOpen, setIsTerminalOpen] = useState(true);
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        const savedMode = localStorage.getItem('isDarkMode');
-        return savedMode ? JSON.parse(savedMode) : true;
-    });
-    const [language, setLanguage] = useState(() => {
-        const savedLang = localStorage.getItem('language');
-        return savedLang ? savedLang : 'en';
-    });
-
-    useEffect(() => {
-        localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
-    }, [isDarkMode]);
-
-    useEffect(() => {
-        localStorage.setItem('language', language);
-    }, [language]);
+    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [language, setLanguage] = useState('en');
 
     const toggleLanguage = () => {
         setLanguage(prevLanguage => (prevLanguage === 'en' ? 'fr' : 'en'));
