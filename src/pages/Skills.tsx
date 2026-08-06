@@ -34,7 +34,7 @@ const translations: { en: Translation; fr: Translation } = {
         pageTitle: "Compétences",
 
         cat1: "Ingénierie & Architecture Logicielle",
-        desc1: "Solides bases en programmation orientée objet, algorithmes, structures de données, design patterns et programmation concurrente. Expérience dans la conception d'architectures logicielles maintenables, avec une formation en construction de compilateurs, optimisation de code et apprentissage automatique.",
+        desc1: "Solides bases en programmation orientée objet, algorithmes, structures de données, design patterns et programmation concurrente. Expérience dans la conception d'architectures logicielles maintenables, avec une formation en construction de compilateurs, optimisation de code et bases du machine learning.",
 
         cat2: "Frontend",
         desc2: "Développement d'applications web modernes et d'applications mobiles multiplateformes avec des interfaces réactives, maintenables et centrées sur l'utilisateur.",

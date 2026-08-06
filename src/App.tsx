@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Terminal from "./components/Terminal.tsx";
 import Home from "./pages/Home.tsx";
 import SiteSidebar from "./components/SiteSidebar.tsx";
@@ -7,7 +7,6 @@ import PS5Project from "./pages/projects/PS5Project.tsx";
 import PS6Project from "./pages/projects/PS6Project.tsx";
 import Resume from "./pages/Resume.tsx";
 import Skills from "./pages/Skills.tsx";
-import resumeUrl from './assets/resume.pdf';
 import Formation from "./pages/Formation.tsx";
 
 function App() {
@@ -29,10 +28,6 @@ function App() {
         background: isDarkMode ? '#1e1e1e' : '#ffffff',
         text: isDarkMode ? '#e0e0e0' : '#333333',
     };
-
-    useEffect(() => {
-        fetch(resumeUrl);
-    }, []);
 
     return (
         <BrowserRouter>
