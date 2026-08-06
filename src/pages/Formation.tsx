@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { motion, type Variants } from "framer-motion";
 
 type FormationEvent = {
@@ -42,6 +42,26 @@ const translations = {
 
 function Formation({ isDarkMode, language }: { isDarkMode: boolean, language: string }) {
     const t = language === 'fr' ? translations.fr : translations.en;
+
+    // State to track mobile screen size
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 768px)");
+        const handleMediaQueryChange = (event: MediaQueryListEvent) => {
+            setIsMobile(event.matches);
+        };
+
+        // Set initial state and add listener
+        setIsMobile(mediaQuery.matches);
+        mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+        // Cleanup listener on unmount
+        return () => {
+            mediaQuery.removeEventListener('change', handleMediaQueryChange);
+        };
+    }, []);
+
 
     const theme = {
         pageContainer: {
@@ -98,8 +118,8 @@ function Formation({ isDarkMode, language }: { isDarkMode: boolean, language: st
                     {events.map((event, index) => {
                         const isLeft = index % 2 === 0;
                         return (
-                            <motion.div key={event.id} variants={itemVariants} style={eventWrapper(isLeft)}>
-                                <div style={{ ...dotStyle(isLeft), ...theme.dot }}></div>
+                            <motion.div key={event.id} variants={itemVariants} style={eventWrapper(isLeft, isMobile)}>
+                                <div style={{ ...dotStyle(isLeft, isMobile), ...theme.dot }}></div>
                                 <div style={{ ...cardStyle, ...theme.card }}>
                                     <h3 style={{...cardTitle, ...theme.cardTitle}}>{event.title}</h3>
                                     <p style={{...cardDescription, ...theme.cardDescription}}>{event.description}</p>
@@ -122,7 +142,7 @@ export default Formation;
 const pageContainer: React.CSSProperties = {
     maxWidth: "900px",
     margin: "2rem auto",
-    padding: "2rem",
+    padding: "2rem 1rem",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 };
 
@@ -139,31 +159,46 @@ const timelineContainer: React.CSSProperties = {
 
 const lineStyle: React.CSSProperties = {
     position: "absolute",
-    left: "50%",
     top: 0,
     bottom: 0,
     width: "3px",
+    left: "50%",
     transform: "translateX(-50%)",
 };
 
-const eventWrapper = (isLeft: boolean): React.CSSProperties => ({
+const eventWrapper = (isLeft: boolean, isMobile: boolean): React.CSSProperties => ({
     position: "relative",
+    boxSizing: "border-box",
+    marginBottom: "40px",
+    // --- Desktop Styles ---
+    ...(!isMobile && {
     width: "50%",
     padding: `0 40px`,
-    boxSizing: "border-box",
     left: isLeft ? 0 : "50%",
     textAlign: isLeft ? "right" : "left",
-    marginBottom: "40px",
+    }),
+    // --- Mobile Styles ---
+    ...(isMobile && {
+        width: "100%",
+        padding: '30px 25px 0 25px',
+        textAlign: 'center', // Center the card within the wrapper
+    }),
 });
 
-const dotStyle = (isLeft: boolean): React.CSSProperties => ({
+const dotStyle = (isLeft: boolean, isMobile: boolean): React.CSSProperties => ({
     position: "absolute",
-    top: "5px",
+    top: "0",
     width: "15px",
     height: "15px",
     borderRadius: "50%",
     zIndex: 1,
-    ...(isLeft ? { right: "-8.5px" } : { left: "-6.5px" }),
+    // --- Desktop Styles ---
+    ...(!isMobile && (isLeft ? { right: "-8.5px", top: "5px" } : { left: "-6.5px", top: "5px" })),
+    // --- Mobile Styles ---
+    ...(isMobile && {
+        left: '50%',
+        transform: 'translateX(-50%)',
+    }),
 });
 
 const cardStyle: React.CSSProperties = {
@@ -171,6 +206,10 @@ const cardStyle: React.CSSProperties = {
     borderRadius: "10px",
     display: "inline-block",
     position: "relative",
+    textAlign: 'left',
+    width: '100%',
+    boxSizing: 'border-box',
+    maxWidth: '400px',
 };
 
 const cardTitle: React.CSSProperties = {
