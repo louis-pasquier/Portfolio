@@ -139,6 +139,9 @@ function SiteSidebar({ isTerminalOpen, toggleTerminal, isDarkMode, toggleDarkMod
             {/* --- SIDEBAR PANEL --- */}
             <Sidebar
                 collapsed={activeTab === null}
+                toggled={activeTab !== null}
+                onBackdropClick={() => setActiveTab(null)}
+                breakPoint="md"
                 collapsedWidth="0px"
                 width="250px"
                 backgroundColor={theme.sidebarBg}
