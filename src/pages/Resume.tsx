@@ -1,4 +1,4 @@
-import resumeUrl from '../assets/resume/resume.pdf';
+import resumeUrl from '/resume.pdf';
 import { memo, useState } from 'react';
 
 const Resume = memo(function Resume() {
