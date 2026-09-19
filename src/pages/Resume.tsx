@@ -1,4 +1,3 @@
-import resumeUrl from '/resume.pdf';
 import { memo, useState } from 'react';
 
 const Resume = memo(function Resume() {
@@ -8,7 +7,7 @@ const Resume = memo(function Resume() {
         <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {isLoading && <p>Loading resume...</p>}
             <object
-                data={resumeUrl}
+                data={'/resume.pdf'}
                 type="application/pdf"
                 width="100%"
                 height="100%"
